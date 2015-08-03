@@ -30,7 +30,9 @@ module ActiveJob
         include SuckerPunch::Job
 
         def perform(job_data)
-          Base.execute job_data
+          ActiveRecord::Base.connection_pool.with_connection do
+            Base.execute job_data
+          end
         end
       end
     end
